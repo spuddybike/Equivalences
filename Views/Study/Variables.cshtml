@@ -1,0 +1,145 @@
+﻿@model ColecticaSdkMvc.Models.VariableModel
+
+@{
+    ViewBag.Title = "ItemType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData.Keep("myModel");
+
+    <link href="@Url.Content("~/Content/Responsive-Card-Table.css")" rel="stylesheet" type="text/css" />
+}
+
+<style type="text/css">
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<div style="margin-bottom:20px">
+    <h2>Identifying Equivalent Vartiables</h2>
+</div>
+
+@*@using (Html.BeginForm("Equivalences", "Variable", new { equivalenceselection = Model.EquivalenceSelection }, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
+@using (Html.BeginForm("Variables", "Question", FormMethod.Post, new { name = "MyForm", id = "SearchForm2" }))
+{
+    int itemCount = 0;
+    int currentItem = 0;
+    int currentCounter = 0;
+
+
+    @*<input type="hidden" value="" name="selectedItems" id="selectedItems" />*@
+    <input type="hidden" value="" name="selectedNames" id="selectedNames" style="margin-top:10px; width:100%; font-size:small" />
+    <input type="hidden" value="" name="selectedDescriptions" id="selectedDescriptions" style="margin-top:10px; width:100%; font-size:small" />
+    <input type="hidden" value="" name="selectedQuestions" id="selectedQuestions" style="margin-top:10px; width:100%; font-size:small" />
+
+    <script language="javascript">
+        function myname(field, count, item) {
+            var str = document.getElementById("selectedNames").value;
+
+            for (i = 0; i < field.length; i++) {
+                if (i + 1 == count) {
+                    if (field[i].checked == true) {
+                        str = str + item + ";";
+                    }
+                    else {
+                        str = str.replace(item + ";", "");
+                    }
+                }
+            }
+            document.getElementById("selectedNames").value = str;
+        }
+
+        function mydescription(field, count, item) {
+            var str = document.getElementById("selectedDescriptions").value;
+
+            for (i = 0; i < field.length; i++) {
+                if (i + 1 == count) {
+                    if (field[i].checked == true) {
+                        str = str + item + ";";
+                    }
+                    else {
+                        str = str.replace(item + ";", "");
+                    }
+                }
+            }
+            document.getElementById("selectedDescriptions").value = str;
+        }
+
+        function myquestion(field, count, question, item) {
+            var str = document.getElementById("selectedQuestions").value;
+
+            for (i = 0; i < field.length; i++) {
+                if (i + 1 == count) {
+                    if (field[i].checked == true) {
+                        str = str + item + ";";
+                    }
+                    else {
+                        str = str.replace(item + ";", "");
+                    }
+                }
+            }
+            document.getElementById("selectedQuestions").value = str;
+        }
+    </script>
+
+    if (Model.Results.Count() != 0)
+    {
+        <div style="border: 1px solid black; margin-top:10px">
+            <table border="0" style="width:100%">
+                <thead>
+                    <tr>
+                        <th align="left" style="width:2px">ID</th>
+                        <th align="left" style="width:30%">Name</th>
+                        <th align="left" style="width:30%">Description</th>
+                        <th align="left" style="width:20%">Question Item</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Results)
+                    {
+                        
+                        itemCount++;
+                        currentCounter++;
+                        if (itemCount == 1) { currentItem = item.uniqueId; }
+                        if (item.uniqueId != currentItem)
+                        {
+                            currentItem = item.uniqueId;
+                            currentCounter = 1;
+                            @Html.Raw("</tbody></table></div><div style=\"border: 1px solid black; margin-top:5px\"><table border=\"0\" style=\"width: 100%\"><tbody>");
+                        }
+                        <tr>
+                            <td style="width:2%">
+                                @if (currentCounter == 1)
+                                {@item.uniqueId}
+                            </td>
+                            <td style="width:30%">
+                                <input id="item@(item.uniqueId.ToString())"
+                                       type="checkbox"
+                                       name="SelectedNames"
+                                       onClick="myname(document.MyForm.SelectedNames, @item.uniqueId,'@item.uniqueId,'+document.getElementById('n:@item.uniqueId').value)"
+                                       value="@item.uniqueId" />
+                                <input name="n:@item.uniqueId" id="n:@item.uniqueId" type="text" value="@item.questionName" style="width:90%" />
+                            </td>
+                            <td style="width:30%">
+                                @if (currentCounter == 1)
+                                {
+
+                                    <input id="item@(item.uniqueId.ToString())"
+                                           type="checkbox"
+                                           name="SelectedDescriptions"
+                                           onClick="mydescription(document.MyForm.SelectedDescriptions, @item.uniqueId,'@item.uniqueId,'+document.getElementById('d:@item.uniqueId').value)"
+                                           value="@item.uniqueId" />
+
+                                    <input name="d:@item.uniqueId" id="d:@item.uniqueId" type="text" value="@item.questionText" style="width:90%" />
+                                }
+                            </td>
+                            <td style="width:20%">@item.questionItem</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <input name="command" type="submit" value="Process" id="process" , style="float:right; font-size:small; margin:10px" />
+
+        </div>
+    }
+}

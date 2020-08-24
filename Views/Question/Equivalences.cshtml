@@ -1,0 +1,195 @@
+﻿@model ColecticaSdkMvc.Models.VariableModel
+@{
+    ViewBag.Title = "ItemType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TempData.Keep("myModel");
+
+    <link href="@Url.Content("~/Content/Responsive-Card-Table.css")" rel="stylesheet" type="text/css" />
+}
+
+<style type="text/css">
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+<div style="margin-bottom:20px">
+    <h2>Identifying Equivalent Questions</h2>
+</div>
+
+@using (Html.BeginForm("Equivalences", "Question", FormMethod.Post, new { enctype = "multipart/form-data", name = "MyForm", id = "SearchForm2" }))
+{
+    int itemCount = 0;
+    int currentItem = 0;
+    int currentCounter = 0;
+
+
+    <input type="hidden" value="" name="selectedItems" id="selectedItems" style="margin-top:10px; width:100%; font-size:small" />
+    @*<input value="" name="selectedQuestions" id="selectedQuestions" style="margin-top:10px; width:100%; font-size:small" />*@
+    @*@Html.HiddenFor(x => x.EquivalenceSelection, new { style = "margin-top:10px; width:100%; font-size:small" })*@
+    @Html.HiddenFor(x => x.selectedQuestionName, new { style = "margin-top:10px; width:100%; font-size:small", value = "" })
+    @Html.HiddenFor(x => x.selectedQuestionText, new { style = "margin-top:10px; width:100%; font-size:small" })
+    @Html.HiddenFor(x => x.EquivalenceSelection, new { style = "margin-top:10px; width:100%; font-size:small", @value = "@model.EquivalanceSelection" })
+    <script language="javascript">
+        function processSelectedItem(questiontext) {
+            var items = document.getElementById("selectedItems");
+            alert(items);
+            var item = document.getElementById(questiontext);
+            alert(item);
+            document.getElementById("selectedItems") = items + questiontext;
+            alert(document.getElementById("selectedItems").value);
+
+        }
+
+        function myfunction(field, field1, count, item) {
+            var str = document.getElementById("selectedQuestionName").value;
+            for (i = 0; i < field.length; i++) {
+                if (i + 1 == count) {
+                    if (field[i].checked == true) {
+                        str = str + item + ";";
+                    }
+                    else {
+                        str = str.replace(item + ";", "");
+                    }
+                }
+            }
+            document.getElementById("selectedQuestionName").value = str;
+            var f2 = field1.length;
+
+            for (j = 0; i < field1.length; j++) {
+                field1[j].checked = true
+            }
+            alert(f2);
+        }
+
+        function myquestion(field, count, question, item) {
+            var str = document.getElementById("selectedQuestionText").value;
+
+            for (i = 0; i < field.length; i++) {
+                if (i + 1 == count) {
+                    if (field[i].checked == true) {
+                        str = str + item + ";";
+                    }
+                    else {
+                        str = str.replace(item + ";", "");
+                    }
+                }
+            }
+            document.getElementById("selectedQuestionText").value = str;
+        }
+    </script>
+
+    <div style="margin-top:10px; margin-bottom:10px; padding:10px; border-style:solid; border-width:thin; width:100%">
+        <label style="margin-left:5px"><strong>Equivalences</strong></label>
+        @Html.TextBoxFor(model => model.Equivalence, new { style = "margin-left:5px; width:200px; font-size:small" })
+        <input name="command" type="submit" value="Save" id="save" , style="font-size:small; margin-left:5px; margin-right:20px" />
+        <input name="command" type="submit" value="Display Selected" id="displayselected" , style="float:right; font-size:small; margin-left:10px; margin-right:10px" />
+        <input name="command" type="submit" value="Display All" id="displayall" , style="float:right; font-size:small; margin-left:10px; margin-right:10px" />
+        @Model.Elapsed
+        <input name="command" type="submit" value="Upload" id="upload" , style="float:right; font-size:small; margin-left:10px; margin-right:10px" />
+        <input type="file" id="postedFile" name="postedFile" accept=".csv" style="float:right" />
+        @Html.Label("File Upload", new { @class = "col-sm-3", @style = "float:right; margin-right:10px" })
+
+    </div>
+    <div style="margin-top:10px; margin-bottom:10px; padding-bottom:40px; width:95%">
+        @if (Model.Equivalences != null)
+        {
+            if (@Model.Equivalences.Count != 0)
+            {
+                foreach (var item in Model.Equivalences)
+                {
+                    @*<div style="float:left; margin:10px">*@
+                        <label style="margin-left:10px; margin-top:10px; float:left">@item.Value</label>
+                        <input style="margin-left:10px; margin-top:10px; float:left" type="button" title="Delete" value="Delete" onclick="location.href='@Url.Action("DeleteItem", "Question", new { selectedItems = @Model.SelectedResults, word = @item.Value, wordselection = @Model.EquivalenceSelection })'" />
+                    @*</div>*@
+                }
+            }
+        }
+    </div>
+    if (Model.Results.Count() != 0)
+    {
+
+        <div style="border: 1px solid black; padding-top:10px">
+            <table border="0" style="width:100%">
+                <thead>
+                    <tr>
+                        <th align="left" style="width:2px">ID</th>
+                        <th align="left" style="width:10%">Name</th>
+                        <th align="left" style="width:20%">Description</th>
+                        <th></th>
+                        <th align="left" style="width:17%">Question Name</th>
+                        <th align="left" style="width:20%">Question Text</th>
+                        <th align="left" style="width:5%">Group</th>
+                        <th align="left" style="width:10%">Study</th>
+                        <th align="left" style="width:15%">Concept</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Results.Count(); i++)
+                    {
+                        @Html.TextBoxFor(modelItem => Model.Results[i].uniqueId, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].equivalence, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].questionName, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].questionText, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].identifier, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].questionItem, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].studyGroup, new { style = "width:97%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].study, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].concept, new { style = "width:98%", @type = "hidden" })
+                        @Html.TextBoxFor(modelItem => Model.Results[i].column, new { style = "width:98%", @type = "hidden" })
+
+                        Model.selectedQuestionText = Model.selectedQuestionText + "@item.uniqueId,@item.equivalence,@item.questionName,@item.questionText,@item.questionItem,@item.studyGroup,@item.study,@item.concept,@item.column;";
+                        itemCount++;
+                        currentCounter++;
+                        if (itemCount == 1) { currentItem = Model.Results[i].uniqueId; }
+                        if (Model.Results[i].uniqueId != currentItem)
+                        {
+                            currentItem = Model.Results[i].uniqueId;
+                            currentCounter = 1;
+                            @Html.Raw("</tbody></table></div><div style=\"border: 1px solid black; margin-top:5px\"><table border=\"0\" style=\"width: 100%\"><tbody>");
+                        }
+                        <tr>
+                            <td style="width:2%">
+                                @if (currentCounter == 1)
+                                {
+                                    @Html.DisplayFor(modelItem => Model.Results[i].uniqueId, new { style = "width:98%" })
+                                }
+                            </td>
+                            <td style="width:10%">
+                                @if (currentCounter == 1)
+                                {
+                                    @Html.DisplayFor(modelItem => Model.Results[i].equivalence, new { style = "width:98%" })
+                                }
+                            </td>
+                            <td style="width:20%">
+                                @if (currentCounter == 1)
+                                {
+                                    @Html.TextBoxFor(modelItem => Model.Results[i].description, new { style = "width:95%" })
+                                }
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(modelItem => Model.Results[i].selected, new { style = "width:98%" })
+                            </td>
+                            <td style="width:17%">
+                                @Html.DisplayFor(modelItem => Model.Results[i].questionName, new { style = "width:98%" })
+                            </td>
+                            <td style="width:20%">
+                                @Html.DisplayFor(modelItem => Model.Results[i].questionText, new { style = "width:98%" })
+                            </td>
+                            <td style="width:5%">
+                                @Html.DisplayFor(modelItem => Model.Results[i].studyGroup, new { style = "width:98%" })
+                            </td>
+                            <td style="width:10%">
+                                @Html.DisplayFor(modelItem => Model.Results[i].study, new { style = "width:98%" })
+                            </td>
+                            <td style="width:15%">
+                                @Html.DisplayFor(modelItem => Model.Results[i].concept, new { style = "width:98%" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <input name="command" type="submit" value="Process" id="process" , style="float:right; font-size:small; margin:10px" />
+        </div>
+    }
+}

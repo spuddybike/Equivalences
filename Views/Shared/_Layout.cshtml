@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/foundation")
+    @Scripts.Render("~/Scripts")
+
+    <link href="@Url.Content("~/Content/Study-Filter.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/categories-menu.js")"></script>
+    @*<link href="@Url.Content("~/Content/foundation/foundation.css")" rel="stylesheet" type="text/css" />*@
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        @*<div class="container" style="border:solid; border-width:thin; padding:5px; margin-bottom:10px">
+            <div class="navbar-collapse collapse">
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "Category" })';return false;">Categories</button>
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "CategoryScheme" })';return false;">Category Schemes</button>
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "CodeList" })';return false;">Code List</button>
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "CodeListGroup" })';return false;">Code List Group</button>
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "CodeListScheme" })';return false;">Code List Scheme</button>
+                <button style="width:12%" onclick="location.href='@Url.Action("List", "Home", new { type = "QualityStatement" })';return false;">Quality Statement</button>
+                <button style="width:13%" onclick="location.href='@Url.Action("List", "Home", new { type = "QualityStatementGroup" })';return false;">Quality Statement Group</button>
+                <button style="width:13%"  onclick="location.href='@Url.Action("List", "Home", new { type = "QualityStatementScheme" })';return false;">Quality Statement Scheme</button>
+            </div>
+        </div>*@
+        <div class="container" style="border:solid; border-width:thin; padding:5px">
+            <div class="navbar-collapse collapse">
+                <button style="width:19.5%" onclick="location.href='@Url.Action("Equivalences", "Question", new { itemType = "All" })';return false;"><h5>Compare Questions Items for Equivalences</h5></button>
+                <button style="width:19.5%" onclick="location.href='@Url.Action("Equivalences", "Question", new { itemType = "Question" })';return false;"><h5>Compare Questions for Equivalen1ces</h5></button>
+                @*<button style="width:19.5%" onclick="location.href='@Url.Action("Equivalences", "Study")';return false;"><h5>Compare Variables for Equivalences</h5></button>*@
+                @*<button style="width:19.5%" onclick="location.href='@Url.Action("Summary", "ItemType")';return false;"><h5>Display Summary Items</h5></button>*@
+                <button style="width:19.5%" onclick="location.href='@Url.Action("List", "Home")';return false;"><h5>Display Items</h5></button>
+                <button style="width:19.5%" onclick="location.href='@Url.Action("Select", "Home")';return false;"><h5>Question Matching for Sweeps in a Study</h5></button>
+                <button style="width:19.5%" onclick="location.href='@Url.Action("Menu3", "Home")';return false;"><h5>Question Matching for Sweeps in all Studies</h5></button>
+                @*<button style="width:24.5%" onclick="location.href='@Url.Action("Matches", "Matching")';return false;"><h5>Compare two Strings</h5></button>*@
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+     </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/prettify")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

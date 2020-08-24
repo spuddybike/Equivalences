@@ -1,0 +1,43 @@
+﻿@model ColecticaSdkMvc.Models.Compare
+
+@{
+    Layout = "~/Views/Shared/_Item.cshtml";
+    ViewBag.Title = "String Matching";
+    <link href="@Url.Content("~/Content/Table-Expand.css")" rel="stylesheet" type="text/css" />
+    @*<script src="@Url.Content("~/Scripts/Table-Expand.js")" type="text/javascript"></script>*@
+}
+
+@using (Html.BeginForm("Matches", "Matching", FormMethod.Post, new { id = "SearchForm2" }))
+{
+    @*@Html.HiddenFor(model => model.String1)
+    @Html.HiddenFor(model => model.String2)*@
+
+    <fieldset>
+        <legend>Log in Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.String1, new { @style = "width:10%" })
+                @Html.TextBoxFor(m => m.String1, new { @style = "width:50%" })
+                })
+            </li>
+            <li>
+                @Html.LabelFor(m => m.String2, new { @style = "width:10%" })
+                @Html.TextBoxFor(m => m.String2, new { @style = "width:50%" })
+            </li>
+
+        </ol>
+        <input type="submit" value="Compare" />
+    </fieldset>
+    <table class="responsive-card-table unstriped" style="width:50%">
+        <tbody>
+            <tr>
+                <td>One Word Matches</td>
+                <td>@Model.OneWordMatches(@Model.String1, @Model.String2)</td>
+            </tr>
+            <tr>
+                <td>String Comparison #1</td>
+                <td>@Model.StringCompare1(@Model.String1, @Model.String2)</td>
+            </tr>
+        </tbody>
+    </table>
+}

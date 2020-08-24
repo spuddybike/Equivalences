@@ -1,0 +1,7 @@
+D:\Equivalences\EquivalencesMVC\bin\ColecticaSdkMvc.dll
+D:\Equivalences\EquivalencesMVC\bin\ColecticaSdkMvc.pdb
+D:\Equivalences\EquivalencesMVC\obj\Debug\EquivalencesMVC.csprojAssemblyReference.cache
+D:\Equivalences\EquivalencesMVC\obj\Debug\EquivalencesMVC.csproj.CoreCompileInputs.cache
+D:\Equivalences\EquivalencesMVC\obj\Debug\EquivalencesMVC.csproj.CopyComplete
+D:\Equivalences\EquivalencesMVC\obj\Debug\ColecticaSdkMvc.dll
+D:\Equivalences\EquivalencesMVC\obj\Debug\ColecticaSdkMvc.pdb

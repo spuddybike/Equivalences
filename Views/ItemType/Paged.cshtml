@@ -1,0 +1,51 @@
+﻿@model ColecticaSdkMvc.Models.ItemTypesModel
+
+@{
+    ViewBag.Title = "ItemType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <link href="@Url.Content("~/Content/Responsive-Card-Table.css")" rel="stylesheet" type="text/css" />
+}
+
+<style type="text/css">
+    ul {
+        list-style-type: none;
+    }
+</style>
+@using (Html.BeginForm("Paged", "ItemType", FormMethod.Post, new { id = "SearchForm2" }))
+{
+    <label><strong>Item Types</strong></label>
+    @Html.DropDownListFor(x => Model.ItemType, new SelectList(Model.ItemTypes, "Value", "Text"), "-- Select Item Type --", new { onchange = "document.getElementById('SearchForm2').submit();" })
+    
+    if (Model.Results.Count() != 0)
+    {
+        <div>
+            <table class="responsive-card-table unstriped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th align="left">DisplayLabel</th>
+                        <th align="left">Agency Id</th>
+                        <th align="left">Identifier</th>
+                        <th align="left">Item Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Results)
+                    {
+                        <tr>
+                            <td>
+                                <button onclick="location.href='@Url.Action("Index", "Item", new { agency = @item.AgencyId, id = item.Identifier })';return false;">Items</button>
+                            </td>
+                            <td data-label="DisplayLabel">@item.DisplayLabel.Trim()</td>
+                            <td data-label="AgencyId">@item.AgencyId</td>
+                            <td data-label="Identifier">@item.Identifier</td>
+                            <td>@item.ItemType</td>
+                            @*<td>@Model.GetQuestionCount(@item.result.AgencyId, @item.result.Identifier)</td>*@
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+            }
+            }

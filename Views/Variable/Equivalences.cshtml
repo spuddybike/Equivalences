@@ -1,0 +1,132 @@
+﻿@model ColecticaSdkMvc.Models.VariableModel
+
+@{
+    ViewBag.Title = "ItemType";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    <link href="@Url.Content("~/Content/Responsive-Card-Table.css")" rel="stylesheet" type="text/css" />
+}
+
+<style type="text/css">
+    ul {
+        list-style-type: none;
+    }
+</style>
+
+
+@*@using (Html.BeginForm("Equivalences", "Variable", new { equivalenceselection = Model.EquivalenceSelection }, FormMethod.Post, new { enctype = "multipart/form-data" }))*@
+@using (Html.BeginForm("Equivalences", "Variable", FormMethod.Post, new { id = "SearchForm2" }))
+{
+    int itemCount = 0;
+    int currentItem = 0;
+    int currentCounter = 0;
+    string questionItem = null;
+
+    @*<input type="hidden" value="" name="selectedItems" id="selectedItems" />*@
+    <input value="" name="selectedItems" id="selectedItems" style = "margin:10px; width:500px; font-size:small"/>
+    @Html.HiddenFor(x => x.EquivalenceSelection)
+    <script language="javascript">
+        function processSelectedItem(questiontext) {
+            var items = document.getElementById("selectedItems");
+            alert(items);
+            var item = document.getElementById(questiontext);
+            alert(item);
+            document.getElementById("selectedItems") = items + questiontext;
+            alert(document.getElementById("selectedItems").value);
+
+        }
+
+        function myfunction(item) {
+            document.getElementById("selectedItems").value = document.getElementById("selectedItems").value + item + ",";
+            alert(item);
+        }
+    </script>
+
+    <div style="margin-top:10px; margin-bottom:10px; padding:10px; border-style:solid; border-width:thin; width:100%">
+        <label style="margin-left:5px"><strong>Equivalences</strong></label>
+        @Html.TextBoxFor(model => model.Equivalence, new { style = "margin-left:5px; width:200px; font-size:small" })
+        <input name="command" type="submit" value="Save" id="save" , style="font-size:small; margin-left:5px; margin-right:20px" />
+        @if (@Model.Equivalences.Count != 0)
+        {
+            foreach (var item in Model.Equivalences)
+            {
+                <label style="margin-left:5px">@item.Value</label>
+                <input style="margin-left:5px" ; type="button" title="Delete" value="Delete" onclick="location.href='@Url.Action("DeleteItem", "Variable", new { selectedItems = @Model.SelectedResults, word = @item.Value, wordselection = @Model.EquivalenceSelection })'" />
+            }
+        }
+        <input name="command" type="submit" value="Display" id="display" , style="float:right; font-size:small; margin-left:10px; margin-right:10px" />
+        @Model.Elapsed;
+    </div>
+
+    if (Model.Results.Count() != 0)
+    {
+    <div style="border: 1px solid black">
+        <table border="0" style="width:100%">
+            <thead>
+                <tr>
+                    <th align="left" style="width:2px">ID</th>
+                    @*<th align="left" style="width:15%">Name</th>*@
+                    <th align="left" style="width:25%">Description</th>
+                    <th></th>
+                    <th align="left" style="width:15%">Question Name</th>
+                    <th align="left" style="width:25%">Question Text</th>
+                    <th align="left" style="width:10%">Study Group</th>
+                    <th align="left" style="width:10%">Study</th>
+                    <th align="left" style="width:13%">Concept</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Results)
+                {
+                    itemCount++;
+                    currentCounter++;
+                    if (itemCount == 1) { currentItem = item.uniqueId; }
+                    if (item.uniqueId != currentItem)
+                    {
+                        currentItem = item.uniqueId;
+                        currentCounter = 1;
+                        @Html.Raw("</tbody></table></div><div style=\"border: 1px solid black; margin-top:5px\"><table border=\"0\" style=\"width: 100%\"><tbody>");
+                    }
+                    <tr>
+                        <td style="width:2%">@item.uniqueId</td>
+                        @*<td style="width:15%">
+                            @if (currentCounter == 1)
+                            {<input name="@item.uniqueId" id="@item.uniqueId" type="text" value="@item.name" style="width:98%" />}
+                        </td>*@
+                        <td style="width:25%">
+                            @if (currentCounter == 1)
+                            {
+
+                                <input id="item@(item.uniqueId.ToString()))"
+                                       type="checkbox"
+                                       name="SelectedQuestions"
+                                       onClick="myfunction('@item.uniqueId:'+document.getElementById('t:@item.uniqueId').value)"
+                                       value="@item.uniqueId" />
+
+                                <input name="t:@item.uniqueId" id="t:@item.uniqueId" type="text" value="@item.description" style="width:80%" />
+                                @*<input type="button" onClick="alert('@item.uniqueId:'+document.getElementById('t:@item.uniqueId').value)" value="Change" />*@
+                                @*<input type="button" onClick="myfunction('@item.uniqueId:'+document.getElementById('t:@item.uniqueId').value)" value="Change" />*@
+
+                            }
+                        </td>
+                        <td>
+                            <input id="item@(item.questionItem)"
+                                   type="checkbox"
+                                   name="SelectedResults"
+                                   value="@item.questionItem"
+                                   @(Model.SelectedResults.Contains(item.questionItem) ? "checked" : "") />
+                        </td>
+                        <td style="width:15%">@item.questionName</td>
+                        <td style="width:25%">@item.questionText</td>
+                        <td style="width:10%">@item.studyGroup</td>
+                        <td style="width:10%">@item.study</td>
+                        <td style="width:13%">@item.identifier</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <input name="command" type="submit" value="Process" id="process" , style="float:right; font-size:small; margin:10px" />
+
+    </div>
+    }
+}
